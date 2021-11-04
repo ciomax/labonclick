@@ -1,0 +1,13 @@
+{% extends 'resource_manager/base.html' %}
+{% block body_block %}
+<br>
+<div class="alert alert-danger" role="alert">
+  Are you sure you want to delete this Interface?
+</div>
+<form method="post">
+  {% csrf_token %}
+  <input type="submit" class="btn btn-danger" value="Delete">
+  <a class="btn btn-primary" href="{% url 'resource_manager:vxgw_detail' pk=vxgw_interface.parent_vxgw.id %}">Cancel</a>
+</form>
+
+{% endblock %}

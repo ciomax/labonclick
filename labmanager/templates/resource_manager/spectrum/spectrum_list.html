@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+  {% extends "resource_manager/base.html"%}
+  {% block body_block %}
+  {% load static %}
+      <title>VSATs</title>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="{% static 'css/list_view_filter.css' %}">
+      <script src="{% static 'js/list_view_to_detail.js'%}"></script>
+
+      <div class="container">
+          <div class="list">
+          <table class="table table-stripped table-hover">
+          <h3 class="display-6">Spectrum Analyzers</h3>
+              <thead>
+              <th>Setup</th>
+              <th>Management IP</th>
+              <th>Used by</th>
+              </thead>
+              {% for spectrum in spectrumanalyzer_list %}
+                  <tr class="click-row" data-href="{{ spectrum.id }}">
+                      <td>{{ spectrum.spectrum_setup }}</td>
+                      <td>{{ spectrum.management_IP }}</td>
+                       {% if spectrum.used_by %}
+                            <td>{{ spectrum.used_by.first_name|default_if_none:""}} {{ spectrum.used_by.last_name|default_if_none:""}} <i>{{ spectrum.get_reserved_time }}</i></td>
+                            {% endif %}
+                            </tr>
+              {% endfor %}
+          </table>
+
+          <a style="background-color: #4d8ea8; color: white" class="btn" role="button"
+             href="{% url 'resource_manager:specturm_create' %}">Add new</a></div>
+      </div>
+   {% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% extends 'resource_manager/base.html'%}
+{% block body_block %}
+<!-- <link rel="stylesheet" href="css/new_vsat_from.css"> -->
+<div class="container">
+  <h3 class="display-6">
+    {% if not form.instance.pk %}
+    Create new CPE Port
+    {%else%}
+    Update CPE Port
+    {%endif%}
+  </h3>
+    <div class="form-group col-md-4">
+         <form method="post" id="cpeport_form" data-ports-url="{% url 'resource_manager:load_switch_ports' %}">
+      {% csrf_token %}
+      {{form.as_p}}
+      <input style="background-color: #4d8ea8; color: white" type="submit" class="btn btn-success" value="Apply">
+    </form>
+
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+    $("#id_port_switch").change(function () {
+        const url = $("#cpeport_form").attr("data-ports-url");
+        const port_switchId = $(this).val();
+
+        $.ajax({
+            url: url,
+            data: {
+                'port_switch_id': port_switchId
+            },
+            success: function (data) {
+                $("#id_switch_port_id").html(data);
+            }
+        });
+
+    });
+</script>
+{% endblock %}

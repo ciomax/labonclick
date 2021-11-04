@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% extends 'resource_manager/base.html'%}
+{% load static %}
+{% block body_block %}
+    <script src="{% static 'js/list_view_to_detail.js' %}"></script>
+  <div class="container">
+  <br>
+    <h1 class="display-5">Xena Chassis detail view</h1>
+    <table class="table table-stripped table-hover">
+      <tr>
+        <td>Chassis Type</td>
+        <td>{{ xena_detail.chassis_type }}</td>
+      </tr>
+      <tr>
+        <td>Location</td>
+        <td>{{ xena_detail.location }}</td>
+      </tr>
+      <tr>
+        <td>Management IP</td>
+        <td>{{ xena_detail.management_ip }}</td>
+      </tr>
+              <tr>
+        <td>Chassis password</td>
+        <td>{{ xena_detail.password }}</td>
+      </tr>
+    </table>
+      <br>
+    <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:xena_list' %}"><<<</a>
+    <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:xena_update' xena_detail.id %}">Edit</a>
+    <a style="background-color: #4d8ea8; color: white" class="btn btn-warning" role="button" href="{% url 'resource_manager:xena_module_create' xena_detail.id %}">Add Module</a>
+    <a style="background-color: #4d8ea8; color: white" class="btn btn-warning" role="button" href="{% url 'resource_manager:xena_delete' xena_detail.id %}">Delete</a>
+    <br>
+    <br>
+    {% if messages %}
+    {% for message in messages %}
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+      <div class="alert alert-warning" role="alert">
+        {{ message }}
+      </div>
+      {% else %}
+      <div class="alert alert-info" role="alert">
+        {{ message }}
+      </div>
+      {% endif %}
+    {% endfor %}
+    {% endif %}
+
+
+<div class="col-md-10">
+         <div class="row">
+             {% if xena_detail %}
+                <p class="lead">Port list</p>
+                <table class="table table-stripped table-hover clickable">
+                    <thead>
+                    <th class="col-1">Module ID</th>
+                    <th class="col-1">Port</th>
+                    <th class="col-2">Setup</th>
+                    <th class="col-2">Switch</th>
+                    <th class="col-2">Reserved By</th>
+                    </thead>
+                    {% for module in xena_detail.xena_module.all|dictsort:"module_id" %}
+                        {% for port in module.xena_module_port.all|dictsort:"port_index" %}
+                          <tr data-href = "{% url 'resource_manager:xena_port_update' xid=module.module_chassis.id modid=module.id pk=port.pk%}">
+                            <td><img src="{% static 'svg/RJ45-Female.svg' %}" width="40" height="40"> {{ module.module_id }}</td>
+                            <td>{{port.port_index}}</td>
+                            <td>{{port.port_setup|default_if_none:"-"}}</td>
+                            <td>{{port.port_switch_if|default_if_none:"-"}}</td>
+                          {% if port.used_by %}
+                            <td>{{port.used_by.first_name|default_if_none:"-"}} {{port.used_by.last_name|default_if_none:""}}  <i>{{ port.get_reserved_time|default_if_none:'' }}</i></td>
+                              {% else %}
+                              <td>{{port.used_by.first_name|default_if_none:"-"}} {{port.used_by.last_name|default_if_none:""}}</td>
+                          {% endif %}
+                            <td><a style="background-color: #4d8ea8; color: white" class="btn btn-warning" role="button" href="{% url 'resource_manager:xena_port_update' xid=module.module_chassis.id modid=module.id pk=port.pk %}">Update</a>
+                             {% if port.used_by %}
+                                 <a style="background-color: #507b8c; color: white" class="btn btn-warning" role="button" href="{% url 'resource_manager:xena_port_release' xid=module.module_chassis.id modid=module.id pk=port.pk %}">Release</a></td>
+                             {% else %}
+                                <a style="background-color: #4d8ea8; color: white" class="btn btn-warning" role="button" href="{% url 'resource_manager:xena_port_reserve' xid=module.module_chassis.id modid=module.id pk=port.pk %}">Reserve</a></td>
+                              {% endif %}
+                          </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </table>
+             {% endif %}
+      </div>
+
+</div>
+
+  </div>
+{% endblock %}

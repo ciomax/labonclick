@@ -1,0 +1,118 @@
+
+.accordion-body{
+    background-color: #b2c7d1;
+}
+
+.accordion-button{
+    background-color: #bfd4de;
+}
+
+.description{
+    background-color: #c1d9e3;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.setuptabs{
+  color: yellow;
+  background-color: #b2c7d1;
+}
+
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+  background-color: #a5bfcc;
+
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link {
+  background-color: #b2c7d1;
+  color: black;
+}
+
+
+.btn{
+  border-radius: 10px;
+  margin-left: 7px;
+  box-shadow: 3px 3px 5px #517382,
+  -3px -3px 5px #ebf4f7;
+}
+
+
+.list{
+  box-sizing: border-box;
+  position: relative;
+  top: 20px;
+  padding: 25px;
+  border-radius: 10px;
+  background: #bfd4de;
+  box-shadow: 14px 14px 20px #97a3a8,
+  -14px -14px 20px #ebf4f7;
+}
+
+.equip{
+  padding-top: 30px;
+}
+
+.setup_member{
+  border-radius: 60px;
+  background: #D5E5EC;
+  border-spacing: 20px 20px;
+  padding: 20px;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+      box-shadow: 5px 5px 10px #97a3a8,
+    -5px -5px 10px white;
+}
+
+
+.setup_member_blank{
+  width: 10px;
+}
+
+.member_s{
+  height: 100px;
+}
+
+a .update{
+  float: right;
+  padding: 100px;
+}
+
+.post{
+  position: relative;
+  width: 50%;
+  word-break: break-all;
+  /*left: 400px;*/
+  left: 600px;
+  top: 10px;
+  box-sizing: border-box;
+  border-radius: 15px;
+  background: #bfd4de;
+}
+
+.wiki{
+  width: 90%;
+  position: relative;
+  top: 20px;
+  box-sizing: border-box;
+  background: #bfd4de;
+}
+
+.cke{
+  width: 200px;
+  height: 400px;
+}
+
+.memberc{
+  border: solid white 1px;
+  /*background-color: #335F70;*/
+  color: black;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding-left: 5px;
+}

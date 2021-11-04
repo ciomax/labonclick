@@ -1,0 +1,74 @@
+{% load static %}
+<div class="list">
+    <div>
+        <h3 class="display-5">{{ setup.setup_name }}</h3>
+        <br>
+    </div>
+  <table class="table table-stripped table-hover">
+    <tr>
+      <td>Setup name</td>
+      <td>{{ setup.setup_name }}</td>
+    </tr>
+    <tr>
+      <td>Setup Location</td>
+      <td>{{ setup.setup_location }}</td>
+    </tr>
+    <tr>
+      <td>Setup Type</td>
+      <td>{{ setup.setup_type }}</td>
+    </tr>
+    <tr>
+      <td>Number of members</td>
+      <td>{{ setup.setup_members.count}}</td>
+    </tr>
+     <tr>
+      <td>Members</td>
+      <td></td>
+       </tr>
+  </table>
+  <div class="member_s">
+      <table>
+      {% for member in setup.setup_members.all %}
+      <td class="setup_member">{{ member.first_name }} {{ member.last_name }}</td>
+          <td class="setup_member_blank"></td>
+       {% endfor %}
+    </table>
+
+  </div>
+    <br>
+    <div class="alert alert-light description" role="alert">
+        <p>Description</p>
+        <p>{{ setup.setup_description }}</p>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                <script>
+                 // JQuery
+                $(function () {
+                  var progressUrl = "{% url 'celery_progress:task_status' message %}";
+                  CeleryProgressBar.initProgressBar(progressUrl)
+                });
+                </script>
+                <p>Please refresh the page after task is finished!</p>
+                <p>Running task state:</p>
+                <div class='progress-wrapper'>
+                  <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
+                </div>
+                <div id="progress-bar-message">Waiting for progress to start...</div>
+            {% endif%}
+        {% endfor %}
+    {% endif %}
+
+  <br>
+    <a style="background-color: #4d8ea8; color: white" class="btn btn-fill" role="button" href="{% url 'resource_manager:setup_update' setup.id %}">Edit</a>
+    {% if user in setup.setup_members.all%}
+        <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:leave_setup' setup.id %}">Leave</a>
+    {% else %}
+        <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:join_setup' setup.id %}">Join</a>
+    {% endif %}
+  <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:setup_delete' setup.id %}">Delete</a>
+</div>
+<script src="{% static 'js/celery_progress.js' %}"></script>
+
+

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% extends 'resource_manager/base.html'%}
+{% load static %}
+{% block body_block %}
+<link rel="stylesheet" href="{% static 'css/vsat_history.css' %}">
+<br>
+<div class="container">
+{% if created %}
+    <h5>This CPE was <b>created</b> on <b>{{created.history_date}}</b> by {{created.history_user.first_name}} {{created.history_user.last_name}},
+            since then he's watching the sky, serving the data</h5>
+    <img class="walle" src="{% static 'images/walle_png.png' %}">
+{% endif %}
+
+{% if changes %}
+<br>
+<h5>The following changes ocuured since CPE was created:</h5>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th>Change</th>
+			<th>User</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for change in changes %}
+		<tr>
+			<td>{{ change.new_record.history_date|date:"N j, Y, P"}}</td>
+			<td>
+			{% if change.changed_fields|length > 0 %}
+			{% for change_by_id in change.changes %}
+			<b>{{ change_by_id.field }}</b>
+			from
+			{% if change_by_id.old %}
+			<b>{{ change_by_id.old }}</b>
+			{% else %}
+			<b>blank field</b>
+			{% endif %}
+			to
+			<b>{{ change_by_id.new }}</b>
+			<br>
+			{% endfor %}
+			{% else %}
+			{% endif %}
+			</td>
+			<td>
+			{{ change.new_record.history_user.first_name }} {{ change.new_record.history_user.last_name }}
+			</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+{% else %}
+    <p>No recent changes found.</p>
+{% endif %}
+</div>
+{% endblock %}

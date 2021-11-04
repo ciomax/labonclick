@@ -1,0 +1,49 @@
+{% extends 'resource_manager/base.html'%}
+{% block body_block %}
+{% load static %}
+<script src="{% static 'js/list_view_to_detail.js' %}"></script>
+<div class="container">
+    <br>
+  <h1 class="display-5">Cisco VPN detail view</h1>
+
+  <table class="table table-stripped table-hover">
+    <tr>
+      <td>Cisco VPN Setup</td>
+      <td>{{ ciscovpn_detail.cisco_vpn_setup }}</td>
+    </tr>
+    <tr>
+      <td>IP Address</td>
+      <td>{{ ciscovpn_detail.ip_address }}</td>
+    </tr>
+    <tr>
+      <td>Connection File</td>
+      {% if ciscovpn_detail.connection_file %}
+      <td><a href="{{ciscovpn_detail.connection_file.url}}" download="{{ciscovpn_detail.connection_file.url}}">Download connection file</a></td>
+      {% else %}
+       <td>Not uploaded</td>
+      {% endif %}
+    </tr>
+  </table>
+  <br>
+    <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:ciscovpn_list' %}"><<<</a>
+  <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:ciscovpn_update' ciscovpn_detail.id %}">Edit</a>
+  <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:ciscovpn_delete' ciscovpn_detail.id %}">Delete</a>
+<br>
+<br>
+</div>
+{% if messages %}
+    {% for message in messages %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+      <div class="alert alert-warning" role="alert">
+        {{ message }}
+      </div>
+    {% else %}
+      <div class="alert alert-info" role="alert">
+        {{ message }}
+      </div>
+{% endif%}
+{% endfor %}
+{% endif %}
+
+
+{% endblock %}

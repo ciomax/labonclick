@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+{% extends 'resource_manager/base.html'%}
+{% load static %}
+{% block body_block %}
+    <script src="{% static 'js/list_view_to_detail.js' %}"></script>
+  <div class="container">
+    <h1 class="display-5">Router detail view</h1>
+
+    <table class="table table-stripped table-hover">
+      <tr>
+        <td>Setup</td>
+        <td>{{ router.router_setup }}</td>
+      </tr>
+      <tr>
+        <td>Model</td>
+        <td>{{ router.router_model }}</td>
+      </tr>
+      <tr>
+        <td>Management IP</td>
+        <td>{{ router.router_mgmt_ip }}</td>
+      </tr>
+      <tr>
+        <td>Username</td>
+        <td>{{ router.router_username }}</td>
+      </tr>
+      <tr>
+        <td>Password</td>
+        <td>{{ router.router_password }}</td>
+      </tr>
+       <tr>
+        <td>Console Connection</td>
+        <td>{{ router.router_console_connection }}</td>
+      </tr>
+      <tr>
+        <td>Gilat Internal ID</td>
+        <td>{{ router.gilat_id }}</td>
+      </tr>
+    </table>
+
+      <br>
+  <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:router_list' %}"><<<</a>
+    <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:router_update' router.id %}">Edit</a>
+{#    <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:router_interface_create' pc.id %}">Add interface</a>#}
+    <a style="background-color: #4d8ea8; color: white" class="btn btn-warning" role="button" href="{% url 'resource_manager:routers_interface_create' router.id %}">Add Interface</a>
+
+    <a style="background-color: #4d8ea8; color: white" class="btn btn-warning" role="button" href="{% url 'resource_manager:router_delete' router.id %}">Delete</a>
+    <br>
+    <br>
+    {% if messages %}
+    {% for message in messages %}
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+      <div class="alert alert-warning" role="alert">
+        {{ message }}
+      </div>
+      {% else %}
+      <div class="alert alert-info" role="alert">
+        {{ message }}
+      </div>
+      {% endif %}
+    {% endfor %}
+    {% endif %}
+
+
+<div class="col-md-6">
+         <div class="row">
+             {% if router.router_interfaces %}
+                <p class="lead">Interface list</p>
+                <table class="table table-stripped table-hover clickable">
+                    <thead>
+                    <th class="col-1">Interface</th>
+                    <th class="col-2">Connected to</th>
+                    <th class="col-2">Description</th>
+                    </thead>
+                    {% for port in router.router_interfaces.all %}
+                      <tr class="click-row" data-href = "{% url 'resource_manager:routers_interface_update' rid=port.parent_router.id pk=port.pk %}">
+                        <td><img src="{% static 'svg/RJ45-Female.svg' %}" width="40" height="40"> {{port.interface_index}}</td>
+                        <td>{{port.router_interface_switch_if|default_if_none:"NOT CONNECTED"}}</td>
+                        <td>{{port.port_description|default_if_none:"-"}}</td>
+                      </tr>
+                    {% endfor %}
+                </table>
+             {% endif %}
+      </div>
+
+</div>
+
+  </div>
+{% endblock %}

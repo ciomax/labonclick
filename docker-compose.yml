@@ -1,0 +1,84 @@
+version: '3.7'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+  web:
+    build: ./labmanager
+    command: gunicorn labonclick.wsgi:application --bind 0.0.0.0:8000
+    container_name: labmanager
+    volumes:
+      - static_volume:/home/app/web/static/
+      - media_volume:/home/app/web/media/
+      - ovpn:/home/app/web/ovpn/
+    ports:
+      - 8000:8000
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN  
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - db
+      - redis
+  db:
+    image: postgres:12.0-alpine
+    container_name: Database
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=pguser
+      - POSTGRES_PASSWORD=pgpassword
+      - POSTGRES_DB=labmanager
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - 80:80
+    volumes:
+      - static_volume:/home/app/web/static/
+      - media_volume:/home/app/web/media/
+    depends_on:
+      - web
+  celery:
+    restart: always
+    build:
+      context: ./labmanager
+    container_name: Celery
+    command: celery -A labonclick worker -l info
+    user: root
+    volumes:
+      - app:/home/app/web/
+      - ovpn:/home/app/web/ovpn/
+    env_file:
+      - ./.env.prod
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    depends_on:
+      - db
+      - redis
+      - web
+  pgbackups:
+    container_name: Backup
+    image: prodrigestivill/postgres-backup-local
+    restart: always
+    volumes:
+      - ./backup:/backups
+    links:
+      - db:db
+    depends_on:
+      - db
+    env_file:
+      - ./.env.prod
+volumes:
+  static_volume:
+  postgres_data:
+  media_volume:
+  ovpn:
+  app:
+  backup:

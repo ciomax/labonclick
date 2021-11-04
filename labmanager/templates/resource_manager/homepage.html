@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+{% extends "resource_manager/base.html"%}
+{% load static %}
+  {% block body_block %}
+      <script src="{% static 'js/list_view_to_detail.js' %}"></script>
+      <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+        {% if user.is_authenticated %}
+          <div class="wk list">
+                <h1 class="display-6">Welcome to the LabOnClick, {{ user.first_name }}</h1>
+                <h1 class="lead message">It's great to have you here! Here you will find a few features that will help us to collaborate much easier!</h1>
+              <h1 class="lead message">...</h1>
+                <h1 class="lead message">Btw, when was the last time you stopped to <a href="{% url 'resource_manager:breathe' %}">breathe</a>?</h1>
+          </div>
+        {% else%}
+          <div class="wk list">
+                <h1 class="display-6">Hi, you are not logged in</h1>
+              <h1 class="lead message">You can only view all the information. Please <a href="{% url 'resource_manager:user_login' %}">Sign In</a> for full interaction with other members.</h1>
+              <h1 class="lead message">...</h1>
+              <h1 class="lead message">Btw, When was the last time you stopped to <a href="{% url 'resource_manager:breathe' %}">breathe</a>?</h1>
+          </div>
+        {% endif %}
+      <br>
+      <br>
+
+
+{% if user.is_authenticated %}
+     <div class="container list">
+
+         <h1 class="lead">Setups you joined</h1>
+     <hr class="line">
+    {% if user.user_setups.all %}
+            <table class="table table-stripped table-hover">
+        <thead>
+            <th>Setup Name</th>
+            <th>Number of members</th>
+        </thead>
+            {% for setup in user.user_setups.all %}
+                <tr class="click-row"  data-href = "{% url 'resource_manager:setup_detail' setup.setup.id %}">
+                    <td>{{ setup.setup }}</td>
+                    <td>{{ setup.setup.membership.count }}</td>
+                </tr>
+            {% endfor %}
+    </table>
+    {% else %}
+        <h1 class="lead">No setups joined. Go to Setup and Join. Let other people know that you work on same environment</h1>
+    {% endif %}
+     </div>
+    <br>
+    <br>
+    <div class="container list equip">
+    <h1 class="lead">List of equipment reserved by you</h1>
+    <hr class="line">
+      {% if user.reserved_vsats.all or user.reserved_vms.all or user.reserved_xena.all or user.reserved_ixia.all or user.reserved_pcs.all or user.reserved_pcs.all %}
+          <table class="table table-stripped table-hover">
+                    <thead>
+                    <th>Equipment Type</th>
+                    <th>Equipment</th>
+                    <th>Setup</th>
+                    <th>Reserved since</th>
+                    </thead>
+                    {% for vsat in user.reserved_vsats.all %}
+                        <tr class="click-row" data-href = "{% url 'resource_manager:cpe_detail' vsat.id %}">
+                        <td>CPE</td>
+                        <td>{{ vsat }}</td>
+                        <td>{{ vsat.cpe_setup }}</td>
+                        <<td>{{ vsat.get_reserved_time}}</td>
+                        </tr>
+                     {% endfor %}
+                    {% for vm in user.reserved_vms.all %}
+                        <tr class="click-row" data-href = "{% url 'resource_manager:esxi_detail' vm.vm_esxi.id %}">
+                        <td>VM</td>
+                        <td>{{ vm }}</td>
+                        <td>{{ vm.vm_esxi.esxi_setup }}</td>
+                        <<td>{{ vm.get_reserved_time}}</td>
+                        </tr>
+                     {% endfor %}
+                      {% for xenap in user.reserved_xena.all %}
+                        <tr class="click-row" data-href = "{% url 'resource_manager:xena_detail' xenap.parent_module.module_chassis.id %}">
+                        <td>Xena Port</td>
+                        <td>{{ xenap }}</td>
+                        <td>{{ xenap.port_setup }}</td>
+                        <<td>{{ xenap.get_reserved_time}}</td>
+                        </tr>
+                     {% endfor %}
+                      {% for ixiap in user.reserved_ixia.all %}
+                        <tr class="click-row" data-href = "{% url 'resource_manager:ixia_detail' ixiap.parent_module.module_chassis.id %}">
+                        <td>Ixia Port</td>
+                        <td>{{ ixiap }}</td>
+                        <td>{{ ixiap.port_setup }}</td>
+                        <<td>{{ ixiap.get_reserved_time}}</td>
+                        </tr>
+                     {% endfor %}
+                      {% for pc in user.reserved_pcs.all %}
+                        <tr class="click-row" data-href = "{% url 'resource_manager:pc_detail' pc.id %}">
+                        <td>PC</td>
+                        <td>{{ pc }}</td>
+                        <td>{{ pc.pc_setup }}</td>
+                        <<td>{{ pc.get_reserved_time}}</td>
+                        </tr>
+                     {% endfor %}
+                </table>
+      </div>
+      {% else %}
+          <h1 class="lead">Nothing reserved by you...</h1>
+      {% endif %}
+{% endif %}
+  {% endblock %}

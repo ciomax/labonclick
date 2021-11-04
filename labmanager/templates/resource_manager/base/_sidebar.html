@@ -1,0 +1,81 @@
+<!-- Side Bar -->
+{% load  static %}
+  <div class="container-fluid ">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse text-white">
+        <div class="position-sticky pt-3 ">
+          <ul class="nav nav-pills flex-column mb-auto ">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="{% url 'resource_manager:home' %}">
+                  <img src="{% static 'svg/card-text.svg' %}" width="25" height="25">
+                  Home
+                </a>
+              </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" aria-current="page" href="#">
+                <img src="{% static 'svg/speedometer2.svg' %}" width="30" height="30">
+                Dashboard-N/A
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'resource_manager:setups' %}">
+                <img src="{% static 'svg/grid-1x2.svg' %}" width="25" height="25" class="image">
+                 Setups
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" data-toggle="collapse" aria-expanded="true" class="nav-link equipment-btn">
+                <img src="{% static 'svg/journal-text.svg' %}" width="30" height="30">
+                Lab Equipment
+              </a>
+              <ul class="collapse list-unstyled" id="pageSubmenu">
+                <li class="nav-item nav-hidden">
+                  <a href="{% url 'resource_manager:cpe_list' %}" class="nav-link">CPEs</a>
+                </li>
+                <li class="nav-item nav-hidden">
+                  <a href="{% url 'resource_manager:switch_list' %}" class="nav-link">Switches</a>
+                </li>
+                <li class="nav-item nav-hidden">
+                  <a href="{% url 'resource_manager:router_list' %}" class="nav-link">Routers</a>
+                </li>
+                <li class="nav-item nav-hidden">
+                  <a href="{% url 'resource_manager:esxi_list' %}" class="nav-link">ESXi</a>
+                </li>
+                <li class="nav-item nav-hidden">
+                  <a href="{% url 'resource_manager:dlf_list' %}" class="nav-link">DLFs</a>
+                </li>
+                <li class="nav-item nav-hidden">
+                  <a href="{% url 'resource_manager:pc_list' %}" class="nav-link">PCs</a>
+                </li>
+                <li class="nav-item nav-hidden">
+                    <a href="{% url 'resource_manager:ovpn_list' %}" class="nav-link">OpenVPN</a>
+                </li>
+                <li class="nav-item nav-hidden">
+                    <a href="{% url 'resource_manager:ciscovpn_list' %}" class="nav-link">CiscoVPN</a>
+                </li>
+                <li class="nav-item nav-hidden">
+                    <a href="{% url 'resource_manager:vxgw_list' %}" class="nav-link">VXGWs</a>
+                </li>
+                <li class="nav-item nav-hidden">
+                    <a href="{% url 'resource_manager:kontron_list' %}" class="nav-link">Kontron</a>
+                </li>
+                <li class="nav-item nav-hidden">
+                    <a href="{% url 'resource_manager:xena_list' %}" class="nav-link">Xena</a>
+                </li>
+                <li class="nav-item nav-hidden">
+                    <a href="{% url 'resource_manager:ixia_list' %}" class="nav-link">IXIA</a>
+                </li>
+{#                        <li class="nav-item nav-hidden">#}
+{#                            <a href="" class="nav-link">Spirent</a>#}
+{#                        </li>#}
+                <li class="nav-item nav-hidden">
+                    <a href="{% url 'resource_manager:specturm_list' %}" class="nav-link">Spectrum Analyzer</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </div>

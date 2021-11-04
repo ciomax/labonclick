@@ -1,0 +1,111 @@
+{% extends 'resource_manager/base.html'%}
+{% load static %}
+{% block body_block %}
+<br>
+<div class="container">
+  <h1 class="display-5">ESXi detail view</h1>
+
+  <table class="table table-stripped table-hover">
+    <tr>
+      <td>Setup</td>
+      <td>{{ esxi_detail.esxi_setup }}</td>
+    </tr>
+    <tr>
+      <td>IP address</td>
+      <td>{{ esxi_detail.esxi_ip_address }}</td>
+    </tr>
+    <tr>
+      <td>Username</td>
+      <td>{{ esxi_detail.esxi_username }}</td>
+    </tr>
+    <tr>
+      <td>Password</td>
+      <td>{{ esxi_detail.esxi_password|default_if_none:"not configured" }}</td>
+    </tr>
+    <tr>
+      <td>Total number of VMs</td>
+      <td>{{ esxi_detail.vms.all.count }}</td>
+    </tr>
+    <tr>
+      <td>Number of reserved VMs</td>
+      <td>{{ esxi_detail.get_reserved_vms }}</td>
+    </tr>
+  </table>
+
+      <br>
+<a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:esxi_list' %}"><<<</a>
+  <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:esxi_update' esxi_detail.id %}">Edit</a>
+    <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:sync_vms' esxi_detail.id %}">Sync/Update VMs</a>
+  <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:esxi_delete' esxi_detail.id %}">Delete</a>
+<br>
+<br>
+{% if not esxi_detail.esxi_password %}
+    <div class="alert alert-info" role="alert">
+        Note, in order to get list of VMs from ESXi, username and password must be configured.
+    </div>
+{% endif %}
+
+
+{% if messages %}
+    {% for message in messages %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="alert alert-warning" role="alert">
+            {{ message }}
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            {{ message }}
+        </div>
+
+{% endif%}
+{% endfor %}
+{% endif %}
+
+
+{% if esxi_detail.vms %}
+ <p class="lead">
+    List of VMs
+</p>
+<table class="table table-stripped table-hover">
+<thead>
+    <th>VM name</th>
+    <th>Guest full name</th>
+    <th>CPU</th>
+    <th>CoresPerSocket</th>
+    <th>Memory</th>
+    <th>Reserved by</th>
+</thead>
+  {% for vm in esxi_detail.vms.all %}
+    <tr class="click-row" data-href = "{{ vm.id }}" >
+        <td><img src="{% static 'svg/computer.svg' %}" width="40" height="40"> {{ vm.vm_name }}</td>
+        <td>{{ vm.vm_guest_FullName }}</td>
+        <td>{{ vm.vm_numCPU }}</td>
+        <td>{{ vm.vm_cores_socket }}</td>
+        <td>{{ vm.vm_memory }}</td>
+        {% if vm.vm_reserved_by %}
+            <td>{{ vm.vm_reserved_by.first_name|default_if_none:""}} {{ vm.vm_reserved_by.last_name }} <i>{{ vm.get_reserved_time }}</i></td>
+            <td><a style="background-color: #507b8c; color: white" class="btn" role="button" href="{% url 'resource_manager:release_vm' vm.id %}">Release</a></td>
+        {% else %}
+            <td></td>
+{#            <td>#}
+{#            <div class="dropdown">#}
+{#                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">#}
+{#                    Dropdown button#}
+{#                  </button>#}
+{#                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">#}
+{#                    <li><a class="dropdown-item" href="#">Action</a></li>#}
+{#                    <li><a class="dropdown-item" href="#">Another action</a></li>#}
+{#                    <li><a class="dropdown-item" href="#">Something else here</a></li>#}
+{#                  </ul>#}
+{#                </div>#}
+{#            </td>#}
+            <td><a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:reserve_vm' vm.id %}">Reserve</a></td>
+        {% endif %}
+    </tr>
+{% endfor %}
+</table>
+
+{% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+/*.container{*/
+/*    background-image: url('../images/walle_png.png');*/
+
+/*    opacity: 0.5;*/
+/*    background-repeat: no-repeat;*/
+/*    background-position: bottom;*/
+/*    !*background-blend-mode: color-burn;*!*/
+/*    width: 90%;*/
+/*    height: 700px;*/
+
+/*}*/
+
+
+.walle{
+    z-index: -5;
+    opacity: 0.1;
+    background-blend-mode: overlay;
+    position: absolute;
+}

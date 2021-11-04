@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% extends 'resource_manager/base.html' %}
+{% block body_block %}
+
+<div class="container">
+  <h3 class="display-6">
+  {% if not form.instance.pk %}
+  Create new Spectrum Analyzer
+  {% else %}
+  Update Spectrum Analyzer
+  {% endif %}
+</h3>
+<div class="form-group col-md-4">
+  <form method="post" id="xport_form" data-switch-url="{% url 'resource_manager:load_switches' %}">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input style="background-color: #4d8ea8; color: white" class="btn btn-success" type="submit" name="" value="Apply">
+  </form>
+</div>
+</div>
+
+<script>
+    $("#id_spectrum_setup").change(function () {
+        const url = $("#xport_form").attr("data-switch-url");
+        const spectrum_setupId = $(this).val();
+        $.ajax({                       // initialize an AJAX request
+            url: url,
+            data: {
+                'setup_id': spectrum_setupId
+            },
+            success: function (data) {
+                $("#id_management_interface").html(data);
+            }
+        });
+    });
+</script>
+{% endblock %}

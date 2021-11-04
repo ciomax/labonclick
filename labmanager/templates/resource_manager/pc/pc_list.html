@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+  {% extends "resource_manager/base.html"%}
+  {% block body_block %}
+  {% load static %}
+      <title>VSATs</title>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="{% static 'css/list_view_filter.css' %}">
+      <script src="{% static 'js/list_view_to_detail.js'%}"></script>
+
+      <div class="container">
+            <div class="form-group filter-class">
+                <form method="get">
+              <div class="form-group">
+                  <label>Setup</label>
+                  {{ filter.form.pc_setup }}
+              </div>
+                    <input style="background-color: #4d8ea8; color: white" type="submit" class="btn btn-success" value="Filter">
+                </form>
+            </div>
+
+          <div class="list">
+          <table class="table table-stripped table-hover">
+          <h3 class="display-6">PCs</h3>
+              <thead>
+              <th>PC role</th>
+              <th>OS</th>
+              <th>Setup</th>
+              <th>Used by</th>
+              </thead>
+              {% for pc in filter.qs %}
+                  <tr class="click-row" data-href="{{ pc.id }}">
+                      <td>{{ pc.pc_role }}</td>
+                      <td>{{ pc.pc_os }}</td>
+                      <
+                      <td>{{ pc.pc_setup }}</td>
+                      {% if pc.pc_reserved_by %}
+                          <td>{{ pc.pc_reserved_by|default_if_none:"" }} <i>{{ pc.get_reserved_time }}</i></td>
+                      {% endif %}
+                  </tr>
+              {% endfor %}
+          </table>
+
+          <a style="background-color: #4d8ea8; color: white" class="btn" role="button"
+             href="{% url 'resource_manager:pc_create' %}">Add new</a></div>
+      </div>
+   {% endblock %}

@@ -1,0 +1,13 @@
+<br>
+{% load static %}
+{% if not setup.wiki.get %}
+<a style="background-color: #4d8ea8; color: white" class="btn btn-fill update" role="button" href="{% url 'resource_manager:createwiki' setup.id %}">Add wiki page</a>
+{% else %}
+<a style="background-color: #4d8ea8; color: white" class="btn btn-fill update" role="button" href="{% url 'resource_manager:updatewiki' setup.wiki.get.id %}">Update Wiki page</a>
+{% endif %}
+
+{% for wiki in setup.wiki.all %}
+<div class="wiki media alert alert-light">
+    {{ wiki.body|safe }}
+</div>
+{% endfor %}

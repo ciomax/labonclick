@@ -1,0 +1,280 @@
+
+<div class=" equip">
+<div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        CPEs
+      </button>
+    </h2>
+    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+      <table class="table table-stripped table-hover table-dropdown">
+                    <thead>
+                        <th>CPE HW Type</th>
+                        <th>CPE MAC</th>
+                        <th>Used by</th>
+                    </thead>
+                    {% for vsat in setup.cpes.all %}
+                        <tr class="click-row" data-href = "{% url 'resource_manager:cpe_detail' vsat.id %}">
+                        <td>{{ vsat.cpe_hw_type }}</td>
+                        <td>{{ vsat.cpe_mac_address }}</td>
+                            {% if vsat.cpe_reserved_by %}
+                            <td>{{ vsat.cpe_reserved_by|default_if_none:""}} <i>{{ vsat.get_reserved_time }}</i></td>
+                            {% endif %}
+{#                        <td>{{ vsat.cpe_reserved_by|default_if_none:""}} {{ vsat.cpe_reserved_since|default_if_none:"" }}</td>#}
+                        </tr>
+                    {% endfor %}
+      </table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+        ESXI
+      </button>
+    </h2>
+    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+    <table class="table table-stripped table-hover">
+      <thead>
+        <th>IP Address</th>
+        <th>Total number of VMs</th>
+        <th>Used VMs</th>
+      </thead>
+      {% for esxi in setup.esxis.all %}
+
+      <tr add class="click-row"  data-href = "{% url 'resource_manager:esxi_detail' esxi.id %}">
+        <td>{{ esxi.esxi_ip_address }}</td>
+        <td>{{ esxi.vms.all.count }}</td>
+        <td>{{ esxi.get_reserved_vms }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+        OpenVPN
+      </button>
+    </h2>
+    <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+            <table class="table table-stripped table-hover">
+      <thead>
+        <th>IP address</th>
+      </thead>
+      {% for openvpn in setup.openvpn_servers.all %}
+      <tr class="click-row"  data-href = "{% url 'resource_manager:ovpnserver_detail' openvpn.id %}">
+        <td>{{ openvpn.ip_address }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingFour">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+        PCs
+      </button>
+    </h2>
+    <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+                <table class="table table-stripped table-hover">
+                    <thead>
+                    <th>PC role</th>
+                    <th>OS</th>
+                    <th>Used by</th>
+                    </thead>
+                    {% for pc in setup.pcs.all %}
+                        <tr class="click-row"  data-href = "{% url 'resource_manager:pc_detail' pc.id %}">
+                        <td>{{ pc.pc_role }}</td>
+                        <td>{{ pc.pc_os }}</td>
+                        <td>{{ pc.pc_reserved_by|default_if_none:""}}</td>
+                        </tr>
+                     {% endfor %}
+                </table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingFive">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseFive">
+        Switches
+      </button>
+    </h2>
+    <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+    <table class="table table-stripped table-hover">
+      <thead>
+        <th>Role</th>
+        <th>Model</th>
+        <th>IP address</th>
+        <th>Number of ports</th>
+      </thead>
+      {% for switch in setup.switches.all %}
+
+      <tr add class="click-row"  data-href = "{% url 'resource_manager:switch_detail' switch.id %}">
+        <td>{{ switch.switch_role }}</td>
+        <td>{{ switch.switch_model }}</td>
+        <td>{{ switch.switch_mgmt_ip }}</td>
+        <td>{{ switch.sw_ports.count }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingSix">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
+        Kontrons
+      </button>
+    </h2>
+    <div id="flush-collapseSix" class="accordion-collapse collapse" aria-labelledby="flush-headingSix" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+            <table class="table table-stripped table-hover">
+      <thead>
+        <th>Server-ID</th>
+        <th>Number of nodes</th>
+      </thead>
+      {% for kontron in setup.kontrons.all %}
+      <tr class="click-row"  data-href = "{% url 'resource_manager:kontron_detail' kontron.id %}">
+        <td>{{ kontron.d_server_id }}</td>
+         <td>{{ kontron.kontron_nodes.count }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-heading1">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse1" aria-expanded="false" aria-controls="flush-collapse1">
+        Routers
+      </button>
+    </h2>
+    <div id="flush-collapse1" class="accordion-collapse collapse" aria-labelledby="flush-heading1" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <table class="table table-stripped table-hover">
+          <thead>
+            <th>Router Model</th>
+            <th>Setup</th>
+            <th>Management IP</th>
+          </thead>
+          {% for router in setup.routers.all %}
+          <tr class="click-row"  data-href = "{% url 'resource_manager:router_detail' router.id %}">
+            <td>{{ router.router_model }}</td>
+            <td>{{ router.router_setup }}</td>
+             <td>{{ router.router_mgmt_ip }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingSeven">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSeven" aria-expanded="false" aria-controls="flush-collapseSeven">
+        VXGWs
+      </button>
+    </h2>
+    <div id="flush-collapseSeven" class="accordion-collapse collapse" aria-labelledby="flush-headingSeven" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <table class="table table-stripped table-hover">
+          <thead>
+            <th>VXGW Model</th>
+            <th>Management IP</th>
+          </thead>
+          {% for vxgw in setup.vxgws.all %}
+          <tr class="click-row"  data-href = "{% url 'resource_manager:vxgw_detail' vxgw.id %}">
+            <td>{{ vxgw.vxgw_model }}</td>
+             <td>{{ vxgw.vxgw_management_ip }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingEight">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseEight" aria-expanded="false" aria-controls="flush-collapseEight">
+        CiscoVPN
+      </button>
+    </h2>
+    <div id="flush-collapseEight" class="accordion-collapse collapse" aria-labelledby="flush-headingEight" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingNine">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseNine" aria-expanded="false" aria-controls="flush-collapseNine">
+        Traffic Generators
+      </button>
+    </h2>
+    <div id="flush-collapseNine" class="accordion-collapse collapse" aria-labelledby="flush-headingNine" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+                <table class="table table-stripped table-hover">
+          <thead>
+            <th>Port</th>
+            <th>Connected to</th>
+            <th>Used by</th>
+          </thead>
+          {% for port in setup.xena_ports.all %}
+          <tr class="click-row"  data-href = "{% url 'resource_manager:xena_detail' port.parent_module.module_chassis.id %}">
+             <td>{{ port }}</td>
+             <td>{{ port.port_switch_if }}</td>
+              {% if port.used_by %}
+                <td>{{ port.used_by.first_name|default_if_none:"" }} {{ port.used_by.last_name|default_if_none:"" }} <i>{{ port.get_reserved_time }}</i></td>
+              {% else %}
+                  <td>{{ port.used_by.first_name|default_if_none:"" }} {{ port.used_by.last_name|default_if_none:"" }}</td>
+              {% endif %}
+          </tr>
+          {% endfor %}
+          {% for port in setup.ixia_ports.all %}
+          <tr class="click-row"  data-href = "{% url 'resource_manager:ixia_detail' port.parent_module.id %}">
+             <td>{{ port }}</td>
+             <td>{{ port.port_switch_if }}</td>
+              {% if port.used_by %}
+                <td>{{ port.used_by.first_name|default_if_none:"" }} {{ port.used_by.last_name|default_if_none:"" }} <i>{{ port.get_reserved_time }}</i></td>
+              {% else %}
+                  <td>{{ port.used_by.first_name|default_if_none:"" }} {{ port.used_by.last_name|default_if_none:"" }}</td>
+              {% endif %}
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingTen">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTen" aria-expanded="false" aria-controls="flush-collapseTen">
+        Spectrum Analyzer
+      </button>
+    </h2>
+    <div id="flush-collapseTen" class="accordion-collapse collapse" aria-labelledby="flush-headingNine" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+          <table class="table table-stripped table-hover">
+                <thead>
+                <th>Management IP</th>
+                <th>Used by</th>
+                </thead>
+                {% for spectrum in setup.spectrums.all %}
+                    <tr class="click-row"  data-href = "{% url 'resource_manager:spectrum_detail' spectrum.id %}">
+                    <td>{{ spectrum.management_IP }}</td>
+                    <td>{{ spectrum.used_by|default_if_none:""}}</td>
+                    </tr>
+                 {% endfor %}
+            </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>

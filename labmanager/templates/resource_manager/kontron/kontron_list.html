@@ -1,0 +1,42 @@
+{% extends 'resource_manager/base.html'%}
+{% block body_block%}
+{% load static %}
+
+<title>DLFs</title>
+<script src="{% static 'js/list_view_to_detail.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/list_view_filter.css' %}">
+<div class="container">
+
+          <div class="form-group filter-class">
+          <form method="get">
+              <div class="form-group">
+                  <label>Setup</label>
+                  {{ filter.form.kontron_setup }}
+              </div>
+              <input style="background-color: #4d8ea8; color: white" type="submit" class="btn btn-success btn-filter" value="Filter">
+          </form>
+      </div>
+      <div class="list">
+      <table class="table table-stripped table-hover">
+      <h3 class="display-6">Kontron List</h3>
+          <thead>
+          <th>Setup</th>
+          <th>Server-ID</th>
+          <th>Number of nodes</th>
+          </thead>
+          {% for kontron in filter.qs %}
+              <tr class="click-row" data-href="{{ kontron.id }}">
+                  <td>{{ kontron.kontron_setup }}</td>
+                  <td>{{ kontron.d_server_id }}</td>
+                  <td>{{ kontron.kontron_nodes.count }}</td>
+              </tr>
+          {% endfor %}
+      </table>
+
+    <a style="background-color: #4d8ea8; color: white" class="btn" role="button"
+       href="{% url 'resource_manager:kontron_create' %}">Add new</a>
+    <br></div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'resource_manager/base.html'%}
+{% block body_block%}
+{% load static %}
+
+<title>ESXi</title>
+<script src="{% static 'js/list_view_to_detail.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/list_view_filter.css' %}">
+
+<div class="container">
+      <div class="filter-class">
+          <div class="form-group">
+              <form method="get">
+              <div class="form-group">
+                  <label>Setup</label>
+                  {{ filter.form.esxi_setup }}
+              </div>
+                  <input style="background-color: #4d8ea8; color: white" type="submit" class="btn btn-success btn-filter"
+                         value="Filter">
+              </form>
+          </div>
+      </div>
+      <div class="list">
+          <table class="table table-stripped table-hover">
+          <h1 class="display-6">ESXi</h1>
+              <thead>
+              <th>Setup</th>
+              <th>IP Address</th>
+              <th>Total number of VMs</th>
+              <th>Used VMs</th>
+              </thead>
+              {% for esxi in filter.qs %}
+
+                  <tr class="click-row" data-href="{{ esxi.id }}">
+                      <td>{{ esxi.esxi_setup }}</td>
+                      <td>{{ esxi.esxi_ip_address }}</td>
+                      <td>{{ esxi.vms.all.count }}</td>
+                      <td>{{ esxi.get_reserved_vms }}</td>
+                  </tr>
+              {% endfor %}
+          </table>
+        <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:esxi_create'%}">Add new</a>
+      </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% extends 'resource_manager/base.html' %}
+{% block body_block %}
+
+<div class="container">
+  <h3 class="display-6">
+  {% if not form.instance.pk %}
+  Create new DLF
+  {% else %}
+  Update DLF
+  {% endif %}
+</h3>
+
+  <form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input style="background-color: #4d8ea8; color: white" class="btn btn-success" type="submit" name="" value="Apply">
+  </form>
+
+</div>
+
+{% endblock %}

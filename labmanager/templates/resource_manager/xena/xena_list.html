@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+  {% extends "resource_manager/base.html"%}
+  {% block body_block %}
+  {% load static %}
+      <title>VSATs</title>
+{#      <!-- <link rel="stylesheet" href="{% static 'css/cpep_style.css' %}"> -->#}
+      <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="{% static 'css/list_view_filter.css' %}">
+      <script src="{% static 'js/list_view_to_detail.js'%}"></script>
+      <div class="container">
+
+            <div class="form-group filter-class">
+                <form method="get">
+              <div class="form-group">
+                  <label>Location</label>
+                  {{ filter.form.location }}
+              </div>
+              <div class="form-group">
+                  <label>Chassis Type</label>
+                  {{ filter.form.chassis_type }}
+              </div>
+                    <input style="background-color: #4d8ea8; color: white" type="submit" class="btn btn-success btn-filter" value="Filter">
+                </form>
+            </div>
+          <div class="list">
+          <table class="table table-stripped table-hover">
+          <h3 class="display-6">Xena Chassis List</h3>
+              <thead>
+              <th>Chassis Type</th>
+              <th>Location</th>
+              <th>Management IP</th>
+              <th>Number of ports</th>
+              <th>Number of used ports</th>
+              </thead>
+              {% for xena in filter.qs %}
+                  <tr class="click-row" data-href="{{ xena.id }}">
+                      <td>{{ xena.chassis_type }}</td>
+                      <td>{{ xena.location }}</td>
+                      <
+                      <td>{{ xena.management_ip }}</td>
+                      <
+                      <td>{{ xena.count_ports }}</td>
+                      <
+                      <td>{{ xena.count_reserved_ports }}</td>
+                  </tr>
+              {% endfor %}
+          </table>
+          <a style="background-color: #4d8ea8; color: white" class="btn" role="button"
+             href="{% url 'resource_manager:xena_create' %}">Add new</a></div>
+      </div>
+   {% endblock %}

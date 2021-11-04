@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% extends 'resource_manager/base.html'%}
+{% load static %}
+{% block body_block %}
+    <script src="{% static 'js/list_view_to_detail.js' %}"></script>
+{#    <link rel="stylesheet" href="{% static 'css/list_view_filter.css' %}">#}
+
+    <br>
+        <div class="container">
+            <h2 class="display-5">CPE detail view</h2>
+
+            <table class="table table-stripped table-hover">
+                <tr>
+                    <td>Hardware Type</td>
+                    <td>{{ vsat.cpe_hw_type }}</td>
+                </tr>
+                <tr>
+                    <td>MAC address</td>
+                    <td>{{ vsat.cpe_mac_address }}</td>
+                </tr>
+                <tr>
+                    <td>Console connection</td>
+                    <td>{{ vsat.cpe_console_ip }} port {{ vsat.cpe_console_port }}</td>
+                </tr>
+                <tr>
+                    <td>Setup</td>
+                    <td>{{ vsat.cpe_setup }}</td>
+                </tr>
+                {% if vsat.cpe_reserved_by %}
+                    <tr>
+                        <td>Used by</td>
+                        <td>{{ vsat.cpe_reserved_by }}</td>
+                    </tr>
+                    <tr>
+                        <td>Reserved since</td>
+                        <td>{{ vsat.cpe_reserved_since }}</td>
+                    </tr>
+                {% endif %}
+            </table>
+
+            <br>
+        <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:cpe_list' %}"><<<</a>
+            <a style="background-color: #4d8ea8; color: white" class="btn" role="button"
+               href="{% url 'resource_manager:cpe_update' vsat.id %}">Edit</a>
+            <a style="background-color: #4d8ea8; color: white" class="btn" role="button"
+               href="{% url 'resource_manager:reserve_cpe' vsat.id %}">Reserve</a>
+            {% if vsat.cpe_reserved_by %}
+
+                <a style="background-color: #4d8ea8; color: white" class="btn" role="button"
+                   href="{% url 'resource_manager:release_cpe' vsat.id %}">Release</a>
+            {% endif %}
+            <a style="background-color: #4d8ea8; color: white" class="btn btn-warning" role="button"
+               href="{% url 'resource_manager:cpe_delete' vsat.id %}">Delete</a>
+            <br>
+            <br>
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="alert alert-warning" role="alert">
+                            {{ message }}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+      <div class="row">
+          <div class="col">
+             {% if vsat.cpe_ports %}
+                 <p class="lead">
+                    Interface List
+                </p>
+                <table class="table table-stripped table-hover clickable">
+                    <thead>
+                    <th class="col-1">Port number</th>
+                    <th class="col-2">Port type</th>
+                    <th class="col-3">Connected to</th>
+                    </thead>
+                    {% for cpeport in vsat.cpe_ports.all%}
+                      <tr class="click-row" data-href = "{% url 'resource_manager:cpe_port_update' cpeid=cpeport.parrent_cpe.id pk=cpeport.pk %}">
+                        <td><img src="{% static 'svg/RJ45-Female.svg' %}" width="40" height="40"> {{cpeport.port_ID}}</td>
+                        <td>{{cpeport.port_type}}</td>
+                        <td>{{cpeport.switch_port_id|default_if_none:"NOT CONNECTED"}}</td>
+                      </tr>
+                    {% endfor %}
+                </table>
+             {% endif %}
+          </div>
+          <div class="col">
+          {% if vsat.cpe_rx_ports %}
+            <p class="lead">
+                RF Ports
+            </p>
+            <table class="table table-stripped table-hover">
+              <thead>
+                <th class="col-1">Port</th>
+                <th class="col-3">DLF</th>
+              </thead>
+              {% for cperxport in vsat.cpe_rx_ports.all|dictsort:'rx_id' %}
+              <tr class="click-row" data-href = "{% url 'resource_manager:cperx_port_update' cpeid=cperxport.parent_cpe.id pk=cperxport.pk %}">
+                <td><img src="{% static 'svg/nut.svg' %}" width="30" height="30"> {{cperxport.rx_id}}</td>
+                <td>{{cperxport.dlf_port|default_if_none:"NOT CONNECTED"}}</td>
+              </tr>
+              {% endfor %}
+            </table>
+            {% endif %}
+          </div>
+      </div>
+        </div>
+{% endblock %}

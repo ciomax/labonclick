@@ -1,0 +1,38 @@
+{% extends 'resource_manager/base.html'%}
+{% block body_block%}
+{% load static %}
+<title>DLFs</title>
+<script src="{% static 'js/list_view_to_detail.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/list_view_filter.css' %}">
+<div class="container">
+          <div class="form-group filter-class">
+          <form method="get">
+              <div class="form-group">
+                  <label>Setup</label>
+                  {{ filter.form.ovpn_setup }}
+              </div>
+              <input style="background-color: #4d8ea8; color: white" type="submit" class="btn btn-success btn-filter" value="Filter">
+          </form>
+      </div>
+      <div class="list">
+      <table class="table table-stripped table-hover">
+      <h3 class="display-6">OpenVPN Servers</h3>
+          <thead>
+          <th>OpenVPN Setup</th>
+          <th>IP address</th>
+          </thead>
+          {% for openvpn in filter.qs %}
+              <tr class="click-row" data-href="{{ openvpn.id }}">
+                  <td>{{ openvpn.ovpn_setup }}</td>
+                  <td>{{ openvpn.ip_address }}</td>
+              </tr>
+          {% endfor %}
+      </table>
+
+    <a style="background-color: #4d8ea8; color: white" class="btn" role="button"
+       href="{% url 'resource_manager:ovpn_create' %}">Add new</a></div>
+    <br>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'resource_manager/base.html'%}
+{% load static %}
+{% block body_block %}
+<br>
+<div class="container">
+  <h1 class="display-5">Switch detail view</h1>
+
+  <table class="table table-stripped table-hover">
+    <tr>
+      <td>Switch Model</td>
+      <td>{{ switch.switch_model }}</td>
+    </tr>
+    <tr>
+      <td>Switch Role</td>
+      <td>{{ switch.switch_role }}</td>
+    </tr>
+    <tr>
+      <td>Connected to</td>
+      <td>{{ switch.switch_setup }}</td>
+    </tr>
+    <tr>
+      <td>Management IP</td>
+      <td>{{ switch.switch_mgmt_ip }}</td>
+    </tr>
+    <tr>
+      <td>Console connection</td>
+      <td>{{ switch.switch_console_ip }} {{ switch.switch_console_port }}</td>
+    </tr>
+    <tr>
+      <td>Username</td>
+      <td>{{ switch.switch_username }}</td>
+    </tr>
+    <tr>
+      <td>Password</td>
+      <td>{{ switch.switch_password }}</td>
+    </tr>
+    <tr>
+      <td>Number of interfaces</td>
+      <td>{{ switch.sw_ports.count }}</td>
+    </tr>
+    <tr>
+      <td>Gilat Internal ID</td>
+      <td>{{ switch.switch_gilat_id }}</td>
+    </tr>
+  </table>
+      <br>
+<a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:switch_list' %}"><<<</a>
+  <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:switch_update' switch.id %}">Edit</a>
+  <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:switch_interface_sync' switch.id %}">Sync</a>
+  <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:switch_delete' switch.id %}">Delete</a>
+<br>
+<br>
+
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="alert alert-warning" role="alert">
+            {{ message }}
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            {{ message }}
+        </div>
+{% endif%}
+{% endfor %}
+{% endif %}
+  {% if switch.sw_ports %}
+  <table class="table table-stripped table-hover">
+    <thead>
+        <th>Interface Index</th>
+        <th>Connected to</th>
+        <th>Description (from Switch)</th>
+    </thead>
+      {% for port in switch.sw_ports.all|dictsort:'created' %}
+        <tr add class="click-row" >
+            <td><img src="{% static 'svg/RJ45-Female.svg' %}" width="40" height="40"> {{ port.switch_port_index }} {{port.switch_port_number}}</td>
+            <td>
+                <p>{{ port.cpe_ports_switch.get }}</p>
+                <p>{{ port.pc_ports_switch.get }}</p>
+                <p>{{ port.vxgw_if_switch.get }}</p>
+                <p>{{ port.router_interface_switch.get }}</p>
+                <p>{{ port.xena_port_switch.get }}</p>
+                <p>{{ port.ixia_port_switch.get }}</p>
+                <p>{{ port.kontoron_interfaces.get }}</p>
+                <p>{{ port.spectrum_port.get }}</p>
+            </td>
+            <td><i>{{ port.port_description }}</i></td>
+            <td><a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:switch_sync_descr' switch.id port.id %}">Sync Descr</a></td>
+        </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+</div>
+{% endblock %}

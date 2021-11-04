@@ -1,0 +1,25 @@
+<br>
+{% load static %}
+
+<a style="background-color: #4d8ea8; color: white" class="btn btn-fill update" role="button" href="{% url 'resource_manager:createpost' setup.id %}">Add your update</a>
+<br>
+{% for post in setup.posts.all %}
+<div class="post media alert alert-light">
+{#    <h6>Title: {{ post.message_title }}</h6>#}
+	<h6>{{ post.message_html|safe }}</h6>
+	<div class="media-body">
+		<h7 class="media-heading">
+			<span class="username">@{{ post.user.username }}</span>
+			<time class="time">{{ post.created_at }}</time>
+		</h7>
+		<div class="media-footer">
+			{% if user.is_authenticated %}
+				<a href="{% url 'resource_manager:deletepost' pk=post.pk %}" title="delete" class="btn-simple">
+					<span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
+					<span class="text-danger icon-label">Delete</span>
+				</a>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endfor %}

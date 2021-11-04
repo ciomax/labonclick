@@ -1,0 +1,51 @@
+<br>
+{% load static %}
+
+</br>
+{% if not setup.openvpn_servers.get %}
+<div class="alert alert-info" role="alert">
+    <p>There is no OpenVPN server configured for this setup.</p>
+    <p>Go to Lab Equipment > OpenVPN and define new OpenVPN sever for this setup.</p>
+</div>
+{% else %}
+<a style="background-color: #4d8ea8; color: white" class="btn btn-fill update" role="button" href="{% url 'resource_manager:synckube' setup.id %}">Get pod list</a>
+{% endif %}
+{% regroup setup.kubepods.all|dictsort:"pod_namespace" by pod_namespace as namespace_list %}
+
+<table  class="table table-stripped table-hover">
+       <thead>
+        <th>Namespace</th>
+        <th>Name</th>
+        <th>Image Name</th>
+        <th>Version</th>
+        <th>Latest available version</th>
+    </thead>
+{% for ns in namespace_list %}
+
+        {% for pod in setup.kubepods.all %}
+            {% if pod.pod_namespace == ns.grouper %}
+            <tr>
+                <td> {{ pod.pod_namespace }}</td>
+                <td>{{ pod.pod_name}}</td>
+                <td>{{ pod.pod_image }}</td>
+                <td>{{ pod.pod_version }}</td>
+                {% if pod.pod_version != pod.pod_available_ver and pod.pod_available_ver != None %}
+<!--                <td class="table-info">{{ pod.pod_available_ver }}</td>-->
+                <td><b>{{ pod.pod_available_ver }}</b></td>
+                {% elif pod.pod_available_ver != None %}
+                <td>{{ pod.pod_available_ver }}</td>
+                {% else %}
+                <td></td>
+                {% endif %}
+            </tr>
+            {% endif %}
+        {% endfor %}
+    <tr>
+        <td><br></td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+
+

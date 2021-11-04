@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% extends 'resource_manager/base.html'%}
+{% load static %}
+{% block body_block %}
+<div class="container">
+    <br>
+      <h3 class="display-6">
+      {% if not form.instance.pk %}
+      Create new Switch
+      {% else %}
+      Update Switch
+      {% endif %}
+      </h3>
+        <div class="form-group col-md-4">
+           <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input style="background-color: #4d8ea8; color: white" class="btn btn-success" type="submit" name="" value="Apply">
+          </form>
+        </div>
+</div>
+{% endblock %}

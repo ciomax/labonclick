@@ -1,0 +1,95 @@
+main{
+  font-family: 'Ubuntu', sans-serif;
+  /*font-family: 'Montserrat', sans-serif;*/
+}
+
+#sidebarMenu{
+  font-family: 'Ubuntu', sans-serif;
+  /*font-family: 'Montserrat', sans-serif;*/
+}
+
+body {
+  /*original*/
+  background-color: #D5E5EC;
+  /*background-color: #2A9D8F;*/
+}
+/* Sidebar */
+@media (max-width: 767.98px){
+  .sidebar{
+    top: 5rem;
+  }
+}
+.main-window{
+    padding-top: 10px;
+}
+
+.sidebar{
+  position: fixed;
+  top: 15px;
+  bottom: 0;
+  z-index: 100;
+  padding: 25px 1px 0;
+  box-shadow: 8px 3px 10px -10px black;
+}
+.sidebar .nav-link{
+  font-weight: 500;
+  color: #E9C46A
+}
+
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+.sidebar .nav-hidden{
+  margin-left: 25px;
+  font-size: .9rem;
+}
+.sidebar .nav-link.active{
+  color: #E76F51;
+  background-color: #264653;
+}
+
+
+#sidebarMenu{
+  background-color: #335F70;
+}
+              /* NAVBAR */
+
+/*.navbar .form-control {*/
+/*  padding: .50rem;*/
+/*  border-radius: 2px;*/
+/*}*/
+.navbar{
+  background-color: #335F70;
+  box-shadow: 8px 3px 10px -10px black;
+  font-family: 'Maven Pro', sans-serif;
+}
+.navbar-brand{
+  color: #E76F51
+}
+.navbar-brand:hover{
+  /*color: #E76F51*/
+  color: #E9C46A
+}
+
+.nav-link:hover{
+  color: #E9C46A;
+}
+
+.nav-link{
+  color: #E9C46A
+}
+
+.form-control{
+  border-color: transparent;
+  background-color: #7eabbd;
+  /*background-color: #6d97a8;*/
+}
+
+.form-control:focus{
+  border-color: transparent;
+  /*background-color: #3A6B7E;*/
+  background-color: #7eabbd;
+  box-shadow: 0 0 0 2px #F4A261;
+}

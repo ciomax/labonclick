@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+  {% extends "resource_manager/base.html"%}
+  {% block body_block %}
+  {% load static %}
+      <title>VSATs</title>
+        <link rel="stylesheet" href="{% static 'css/list_view_filter.css' %}">
+      <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <script src="{% static 'js/list_view_to_detail.js'%}"></script>
+      <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+      <br>
+      <div class="container">
+{#      {% if vsat_list %}#}
+          <div>
+    <div class=" filter-class">
+            <form method="get" >
+{#                {% csrf_token %}#}
+                <div class="form-group">
+                    <label>HW Type </label>
+                    {{ filter.form.cpe_hw_type }}
+                </div>
+                <div class="form-group">
+                    <label>CPE MAC Address</label>
+                    {{ filter.form.cpe_mac_address__contains }}
+                </div>
+                <div class="form-group">
+                    <label>Setup</label>
+                    {{ filter.form.cpe_setup }}
+                </div>
+                <div class="form-group">
+                    <label>Filter reserved</label>
+                    {{ filter.form.CPE_not_reserved }}
+                </div>
+                <input style="background-color: #4d8ea8; color: white" type="submit" class="btn btn-success btn-filter" value="Filter">
+            </form>
+    </div>
+          </div>
+
+            <br>
+          <div class="list">
+
+             <h3 class="display-5">CPE List</h3>
+                <table class="table table-stripped table-hover">
+                    <thead>
+                    <th>CPE HW Type</th>
+                    <th>CPE MAC</th>
+                    <th>Setup</th>
+                    <th>Used by</th>
+                    </thead>
+                    {% for vsat in filter.qs %}
+          <!-- <tr data-href = "{{ vsat.id }}"> -->
+                        <tr class="click-row" data-href = "{{ vsat.id }}">
+                        <td>{{ vsat.cpe_hw_type }}</td>
+                        <td>{{ vsat.cpe_mac_address }}</td>
+                        <<td>{{ vsat.cpe_setup}}</td>
+                            {% if vsat.cpe_reserved_by %}
+                            <td>{{ vsat.cpe_reserved_by.first_name|default_if_none:""}} {{ vsat.cpe_reserved_by.last_name|default_if_none:""}} <i>{{ vsat.get_reserved_time }}</i></td>
+                            {% endif %}
+                        </tr>
+                     {% endfor %}
+                </table>
+          <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:cpe_create'%}">Add new</a>
+          </div>
+{#        {% endif %}#}
+{#      <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:cpe_create'%}">Add new</a>#}
+      </div>
+   {% endblock %}

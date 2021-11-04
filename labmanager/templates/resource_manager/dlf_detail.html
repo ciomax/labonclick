@@ -1,0 +1,80 @@
+{% extends 'resource_manager/base.html'%}
+{% block body_block %}
+ {% load static %}
+
+<div class="container">
+    <br>
+  <h1 class="display-5">DLF detail view</h1>
+
+  <table class="table table-stripped table-hover">
+    <tr>
+      <td>DLF Name</td>
+      <td>{{ dlf.dlf_name }}</td>
+    </tr>
+    <tr>
+      <td>DLF Setup</td>
+      <td>{{ dlf.dlf_setup }}</td>
+    </tr>
+    <tr>
+      <td>Connected to</td>
+      <td>{{ dlf.connected_to }}</td>
+    </tr>
+    <tr>
+      <td>Management IP</td>
+      <td>{{ dlf.dlf_mgmt_ip| default_if_none:'' }}</td>
+    </tr>
+    <tr>
+      <td>Management port</td>
+      <td>{{ dlf.dlf_mgmt_port| default_if_none:'' }}</td>
+    </tr>
+  </table>
+  <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:dlf_update' dlf.id %}">Edit</a>
+  <a style="background-color: #4d8ea8; color: white" class="btn" role="button" href="{% url 'resource_manager:dlf_delete' dlf.id %}">Delete</a>
+<br>
+<br>
+  {% if dlf.dlf_ports %}
+
+  <table class="table table-bordered table-hover">
+  <thead>
+    <th>Port number</th>
+    <th>VSATs connected</th>
+{#    {% for port in dlf.dlf_ports.all %}#}
+{#        <th>#}
+{#            <img src="{% static 'svg/record-circle.svg' %}">  {{port.dlf_port_number}}#}
+{#        </th>#}
+{#  {% endfor %}#}
+  </thead>
+        {% for port in dlf.dlf_ports.all %}
+            <tr>
+            <td><img src="{% static 'svg/nut.svg' %}" width="40" height="40"> {{ port.dlf_port_number }}</td>
+            <td>{% for vsat in port.cpe_rx_port_dlf.all %}
+{#                {{ port.cpe_rx_port_dlf.all }}#}
+                <p>{{ vsat }}</p>
+                {% endfor %}
+            </td>
+            </tr>
+{#            <td><img src="{% static 'svg/arrow-down-up.svg' %}"></td>#}
+        {% endfor %}
+  </table>
+
+  {% endif %}
+
+<br>
+</div>
+{% if messages %}
+{% for message in messages %}
+{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+  <div class="alert alert-warning" role="alert">
+    {{ message }}
+  </div>
+{% else %}
+  <div class="alert alert-info" role="alert">
+    {{ message }}
+  </div>
+
+{% endif%}
+{% endfor %}
+{% endif %}
+
+
+{% endblock %}

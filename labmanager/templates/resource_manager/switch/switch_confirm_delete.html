@@ -1,0 +1,13 @@
+{% extends 'resource_manager/base.html' %}
+{% block body_block %}
+<br>
+<div class="alert alert-danger" role="alert">
+  Are you sure you want to delete switch?
+</div>
+<form method="post">
+  {% csrf_token %}
+  <input type="submit" class="btn btn-danger" value="Delete">
+  <a class="btn btn-primary" href="{% url 'resource_manager:switch_detail' switch.id %}">Cancel</a>
+</form>
+
+{% endblock %}

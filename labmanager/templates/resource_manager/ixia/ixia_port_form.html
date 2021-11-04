@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% extends 'resource_manager/base.html' %}
+{% block body_block %}
+
+<div class="container">
+  <h3 class="display-6">
+  Update Xena Port
+</h3>
+<div class="form-group col-md-4">
+  <form method="post" id="xport_form" data-switch-url="{% url 'resource_manager:load_switch' %}" data-ports-url="{% url 'resource_manager:load_switch_ports' %}" >
+    {% csrf_token %}
+    {{form.as_p}}
+    <input style="background-color: #4d8ea8; color: white" class="btn btn-success" type="submit" name="" value="Apply">
+  </form>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+    $("#id_port_setup").change(function () {
+        const url = $("#xport_form").attr("data-switch-url");
+        const port_setupId = $(this).val();
+        $.ajax({                       // initialize an AJAX request
+            url: url,
+            data: {
+                'setup_id': port_setupId
+            },
+            success: function (data) {
+                $("#id_port_switch").html(data);
+            }
+        });
+    });
+    $("#id_port_switch").change(function () {
+    const url = $("#xport_form").attr("data-ports-url");
+    const interface_switchId = $(this).val();
+    $.ajax({                       // initialize an AJAX request
+        url: url,
+        data: {
+            'port_switch_id': interface_switchId
+        },
+        success: function (data) {
+            $("#id_port_switch_if").html(data);
+        }
+        });
+    });
+</script>
+{% endblock %}
