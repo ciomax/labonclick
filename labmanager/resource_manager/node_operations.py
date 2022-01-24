@@ -1,6 +1,6 @@
 from pprint import pprint
 
-import paramiko, yaml, requests
+import paramiko, yaml, requests, re
 from resource_manager.switch_operations import SSHCom
 from resource_manager import definitions
 
@@ -52,8 +52,15 @@ class Kubernetes(object):
                     pod_version = pod['spec']['containers'][0]['image']
                     pod_image = pod_version.split(':')[-2].split('/')[-1]
                     latest_ver = repo_list.ms.get(pod_image, None)
+                    r = re.compile("^100.\d{1,3}.\d{1,3}.\d{1,3}$") #salut2
+                    off_list = []
+                    if latest_ver:
+                        off_list = list(filter(r.match, latest_ver))
                     if latest_ver is not None and len(latest_ver) >=1:
-                        latest_ver = latest_ver[-1]
+                        if off_list:
+                            latest_ver = off_list[-1]
+                        else:
+                            latest_ver = latest_ver[-1]
                     self.pods.append(KubePod(namespace=ns,
                                              pod_name=pod_name,
                                              pod_image=pod_image,
