@@ -39,6 +39,7 @@ def setup_kuberenetes_sync(self, setup_id):
     progress_recorder.set_progress(3, 4, "Connecting to NMS node and collecting information from the running pods.")
     kube = Kubernetes('10.16.0.10')
     kube.get_namespaces(my_repo)
+
     progress_recorder.set_progress(4, 4, "Closing OpenVPN connection.")
     closeOvpn()
     for pod in kube.pods:

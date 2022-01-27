@@ -58,7 +58,7 @@ class Kubernetes(object):
                         off_list = list(filter(r.match, latest_ver))
                     if latest_ver is not None and len(latest_ver) >=1:
                         if off_list:
-                            latest_ver = off_list[-1]
+                            latest_ver = off_list[-1] + "_test_ver3"
                         else:
                             latest_ver = latest_ver[-1]
                     self.pods.append(KubePod(namespace=ns,

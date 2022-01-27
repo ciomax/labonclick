@@ -6,7 +6,7 @@ services:
     container_name: redis
   web:
     build: ./labmanager
-    image: labonclick_web:1.0.0.1
+    image: labonclick_web:1.0.0.5
     command: gunicorn labonclick.wsgi:application --bind 0.0.0.0:8000
     container_name: labmanager
     volumes:
@@ -35,6 +35,7 @@ services:
       - POSTGRES_DB=labmanager
   nginx:
     build: ./nginx
+    image: labonclick_nginx:1.0.0.1
     container_name: nginx
     ports:
       - 80:80
@@ -45,7 +46,7 @@ services:
       - web
   celery:
     restart: always
-    image: labonclick_celery:1.0.0.1
+    image: labonclick_celery:1.0.0.5
     build:
       context: ./labmanager
     container_name: Celery
@@ -72,7 +73,7 @@ services:
     volumes:
       - ./backup:/backups
     links:
-      - db:db
+      - db
     depends_on:
       - db
     env_file:
