@@ -66,6 +66,7 @@ class Kubernetes(object):
                                              pod_image=pod_image,
                                              pod_version=pod_version.split(':')[-1],
                                              availabe_ver=latest_ver))
+                    #test
 
 class DockerRepo(object):
     def __init__(self, catalog, repo):
